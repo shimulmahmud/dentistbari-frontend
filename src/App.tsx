@@ -7,6 +7,7 @@ import { Footer } from "./components/Footer";
 import { HomePage } from "./pages/HomePage";
 import { AboutPage } from "./pages/AboutPage";
 import { ServicesPage } from "./pages/ServicesPage";
+import { ServiceDetailsPage } from "./pages/ServiceDetailsPage";
 import { BookAppointmentPage } from "./pages/BookAppointmentPage";
 import { ContactPage } from "./pages/ContactPage";
 import { PatientPortalPage } from "./pages/PatientPortalPage";
@@ -17,6 +18,33 @@ function AppContent() {
   const [currentPage, setCurrentPage] = useState(
     user ? "patient-portal" : "home"
   );
+
+  // Extract page and params from URL
+  const [currentRoute, setCurrentRoute] = useState(() => {
+    const path = window.location.pathname.substring(1);
+    const [page, ...params] = path.split("/");
+    return { page, params };
+  });
+
+  // Update route when URL changes
+  useEffect(() => {
+    const handleLocationChange = () => {
+      const path = window.location.pathname.substring(1);
+      const [page, ...params] = path.split("/");
+      setCurrentRoute({ page, params });
+      setCurrentPage(page || "home");
+    };
+
+    window.addEventListener("popstate", handleLocationChange);
+    return () => window.removeEventListener("popstate", handleLocationChange);
+  }, []);
+
+  // Update URL when currentPage changes
+  useEffect(() => {
+    if (currentPage && !window.location.pathname.includes(currentPage)) {
+      window.history.pushState({}, "", `/${currentPage}`);
+    }
+  }, [currentPage]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -37,10 +65,22 @@ function AppContent() {
   }, [user, currentPage]);
 
   const handleNavigate = (page: string) => {
-    setCurrentPage(page);
+    if (page.startsWith("/")) {
+      // Handle direct path navigation
+      const [pageName, ...params] = page.substring(1).split("/");
+      setCurrentRoute({ page: pageName, params });
+      setCurrentPage(pageName);
+      window.history.pushState({}, "", page);
+    } else {
+      // Handle regular page navigation
+      setCurrentPage(page);
+      setCurrentRoute({ page, params: [] });
+      window.history.pushState({}, "", `/${page}`);
+    }
   };
 
-  const shouldShowHeaderFooter = currentPage !== "login";
+  const shouldShowHeaderFooter =
+    currentPage !== "login" && !currentPage.startsWith("services/");
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -51,24 +91,32 @@ function AppContent() {
       <main
         className={shouldShowHeaderFooter ? "flex-grow pt-24" : "flex-grow"}
       >
-        {currentPage === "login" && (
+        {currentRoute.page === "login" && (
           <PatientPortalPage onNavigate={handleNavigate} initialView="login" />
         )}
-        {currentPage === "home" && <HomePage onNavigate={handleNavigate} />}
-        {currentPage === "about" && <AboutPage onNavigate={handleNavigate} />}
-        {currentPage === "services" && (
-          <ServicesPage onNavigate={handleNavigate} />
+        {(currentRoute.page === "home" || currentRoute.page === "") && (
+          <HomePage onNavigate={handleNavigate} />
         )}
-        {currentPage === "book-appointment" && (
+        {currentRoute.page === "about" && (
+          <AboutPage onNavigate={handleNavigate} />
+        )}
+        {currentRoute.page === "services" &&
+          currentRoute.params.length === 0 && (
+            <ServicesPage onNavigate={handleNavigate} />
+          )}
+        {currentRoute.page === "services" && currentRoute.params.length > 0 && (
+          <ServiceDetailsPage onNavigate={handleNavigate} />
+        )}
+        {currentRoute.page === "book-appointment" && (
           <BookAppointmentPage onNavigate={handleNavigate} />
         )}
-        {currentPage === "contact" && (
+        {currentRoute.page === "contact" && (
           <ContactPage onNavigate={handleNavigate} />
         )}
-        {currentPage === "patient-portal" && (
+        {currentRoute.page === "patient-portal" && (
           <PatientPortalPage onNavigate={handleNavigate} initialView="login" />
         )}
-        {currentPage === "forgot-password" && (
+        {currentRoute.page === "forgot-password" && (
           <ForgotPasswordPage onNavigate={handleNavigate} />
         )}
       </main>
