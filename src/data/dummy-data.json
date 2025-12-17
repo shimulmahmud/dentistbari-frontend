@@ -1,0 +1,252 @@
+{
+  "users": [
+    {
+      "id": "user-1",
+      "email": "doctor@dentistbari.com",
+      "password": "doctor123",
+      "fullName": "Dr. Md. Ripon Ali",
+      "phone": "+880 1234-567890",
+      "role": "doctor",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "id": "user-2",
+      "email": "patient@example.com",
+      "password": "patient123",
+      "fullName": "Ahmed Khan",
+      "phone": "+880 1987-654321",
+      "role": "patient",
+      "createdAt": "2024-01-15T00:00:00Z"
+    },
+    {
+      "id": "user-3",
+      "email": "fatima@example.com",
+      "password": "patient123",
+      "fullName": "Fatima Islam",
+      "phone": "+880 1765-432109",
+      "role": "patient",
+      "createdAt": "2024-02-01T00:00:00Z"
+    }
+  ],
+  "services": [
+    {
+      "id": "service-1",
+      "title": "General Dentistry",
+      "title_bn": "সাধারণ দন্ত চিকিৎসা",
+      "slug": "general-dentistry",
+      "category": "general",
+      "description": "Comprehensive general dental care including cleanings, fillings, and examinations",
+      "description_bn": "পরিষ্কার, ভরণ এবং পরীক্ষা সহ ব্যাপক সাধারণ দন্ত চিকিৎসা",
+      "short_description": "Routine dental care and treatments",
+      "short_description_bn": "নিয়মিত দন্ত যত্ন এবং চিকিৎসা",
+      "price_range": "1000-5000 BDT",
+      "duration": "30-60 minutes",
+      "image_url": "https://images.pexels.com/photos/3941950/pexels-photo-3941950.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "benefits": ["Clean and healthy teeth", "Prevents cavities", "Improves oral hygiene"],
+      "procedure_steps": ["Examination", "Cleaning", "Assessment", "Treatment plan"],
+      "is_featured": true,
+      "display_order": 1
+    },
+    {
+      "id": "service-2",
+      "title": "Cosmetic Dentistry",
+      "title_bn": "কসমেটিক ডেন্টিস্ট্রি",
+      "slug": "cosmetic-dentistry",
+      "category": "cosmetic",
+      "description": "Teeth whitening, veneers, and smile makeovers",
+      "description_bn": "দাঁত সাদা করা, ভিনিয়ার এবং হাসি পুনর্নির্মাণ",
+      "short_description": "Enhance your smile aesthetically",
+      "short_description_bn": "নান্দনিকভাবে আপনার হাসি উন্নত করুন",
+      "price_range": "5000-15000 BDT",
+      "duration": "1-2 hours",
+      "image_url": "https://images.pexels.com/photos/3759945/pexels-photo-3759945.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "benefits": ["Brighter smile", "Improved confidence", "Enhanced appearance"],
+      "procedure_steps": ["Consultation", "Design", "Treatment", "Follow-up"],
+      "is_featured": true,
+      "display_order": 2
+    },
+    {
+      "id": "service-3",
+      "title": "Orthodontics",
+      "title_bn": "অর্থোডন্টিক্স",
+      "slug": "orthodontics",
+      "category": "orthodontics",
+      "description": "Teeth alignment and bite correction with braces and aligners",
+      "description_bn": "ব্রেসেস এবং এলাইনার দিয়ে দাঁতের সারিবদ্ধকরণ এবং কামড় সংশোধন",
+      "short_description": "Straighten your teeth and correct bite",
+      "short_description_bn": "দাঁত সোজা করুন এবং কামড় সংশোধন করুন",
+      "price_range": "30000-80000 BDT",
+      "duration": "Variable",
+      "image_url": "https://images.pexels.com/photos/3976625/pexels-photo-3976625.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "benefits": ["Straight teeth", "Better bite", "Improved health"],
+      "procedure_steps": ["Assessment", "Fitting", "Adjustment", "Monitoring"],
+      "is_featured": true,
+      "display_order": 3
+    },
+    {
+      "id": "service-4",
+      "title": "Root Canal Treatment",
+      "title_bn": "রুট ক্যানাল চিকিৎসা",
+      "slug": "root-canal",
+      "category": "general",
+      "description": "Save infected or damaged teeth with root canal therapy",
+      "description_bn": "রুট ক্যানাল থেরাপি দিয়ে সংক্রমিত বা ক্ষতিগ্রস্ত দাঁত বাঁচান",
+      "short_description": "Treat infected tooth nerves",
+      "short_description_bn": "সংক্রমিত দাঁতের নার্ভ চিকিৎসা করুন",
+      "price_range": "8000-15000 BDT",
+      "duration": "1-2 hours",
+      "image_url": "https://images.pexels.com/photos/5324597/pexels-photo-5324597.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "benefits": ["Pain relief", "Save tooth", "Prevent extraction"],
+      "procedure_steps": ["Diagnosis", "Cleaning", "Filling", "Crown placement"],
+      "is_featured": false,
+      "display_order": 4
+    },
+    {
+      "id": "service-5",
+      "title": "Pediatric Dentistry",
+      "title_bn": "শিশু দন্ত চিকিৎসা",
+      "slug": "pediatric-dentistry",
+      "category": "pediatric",
+      "description": "Special dental care for children with gentle and friendly approach",
+      "description_bn": "শিশুদের জন্য বিশেষ দন্ত চিকিৎসা মৃদু এবং বন্ধুত্বপূর্ণ পদ্ধতিতে",
+      "short_description": "Dental care for children",
+      "short_description_bn": "শিশুদের জন্য দন্ত চিকিৎসা",
+      "price_range": "500-3000 BDT",
+      "duration": "30-45 minutes",
+      "image_url": "https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "benefits": ["Healthy baby teeth", "Build good habits", "Prevent future issues"],
+      "procedure_steps": ["Examination", "Cleaning", "Education", "Treatment"],
+      "is_featured": true,
+      "display_order": 5
+    }
+  ],
+  "appointments": [
+    {
+      "id": "apt-1",
+      "patient_id": "user-2",
+      "patient_name": "Ahmed Khan",
+      "patient_email": "patient@example.com",
+      "patient_phone": "+880 1987-654321",
+      "service_id": "service-1",
+      "appointment_date": "2024-12-20",
+      "appointment_time": "10:00",
+      "status": "confirmed",
+      "notes": "Regular checkup",
+      "is_emergency": false,
+      "created_at": "2024-12-10T10:30:00Z"
+    },
+    {
+      "id": "apt-2",
+      "patient_id": "user-3",
+      "patient_name": "Fatima Islam",
+      "patient_email": "fatima@example.com",
+      "patient_phone": "+880 1765-432109",
+      "service_id": "service-2",
+      "appointment_date": "2024-12-22",
+      "appointment_time": "14:00",
+      "status": "pending",
+      "notes": "Teeth whitening consultation",
+      "is_emergency": false,
+      "created_at": "2024-12-11T14:00:00Z"
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "testi-1",
+      "patient_name": "Ahmed Khan",
+      "patient_name_bn": "আহমেদ খান",
+      "treatment": "General Dentistry",
+      "rating": 5,
+      "comment": "Excellent service and very friendly staff. Dr. Ripon Ali is highly professional.",
+      "comment_bn": "চমৎকার সেবা এবং অত্যন্ত বন্ধুত্বপূর্ণ কর্মীরা। ডাঃ রিপন আলী অত্যন্ত পেশাদার।",
+      "image_url": "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=400",
+      "is_featured": true,
+      "approved": true
+    },
+    {
+      "id": "testi-2",
+      "patient_name": "Fatima Islam",
+      "patient_name_bn": "ফাতিমা ইসলাম",
+      "treatment": "Cosmetic Dentistry",
+      "rating": 5,
+      "comment": "My smile has completely transformed. Highly recommended!",
+      "comment_bn": "আমার হাসি সম্পূর্ণভাবে পরিবর্তিত হয়েছে। অত্যন্ত সুপারিশকৃত!",
+      "image_url": "https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg?auto=compress&cs=tinysrgb&w=400",
+      "is_featured": true,
+      "approved": true
+    }
+  ],
+  "contact_messages": [
+    {
+      "id": "msg-1",
+      "name": "Ali Ahmed",
+      "email": "ali@example.com",
+      "phone": "+880 1111-111111",
+      "subject": "Appointment inquiry",
+      "message": "I would like to schedule an appointment for cleaning",
+      "status": "new",
+      "created_at": "2024-12-12T09:00:00Z"
+    }
+  ],
+  "password_resets": [],
+  "blog_posts": [
+    {
+      "id": "blog-1",
+      "title": "How to Maintain Healthy Teeth",
+      "title_bn": "সুস্থ দাঁত বজায় রাখার পদ্ধতি",
+      "slug": "how-to-maintain-healthy-teeth",
+      "excerpt": "Learn the essential tips for maintaining healthy teeth throughout your life",
+      "excerpt_bn": "আপনার জীবনব্যাপী সুস্থ দাঁত বজায় রাখার জন্য প্রয়োজনীয় টিপস শিখুন",
+      "content": "Maintaining healthy teeth requires a consistent daily routine...",
+      "content_bn": "সুস্থ দাঁত বজায় রাখার জন্য একটি সামঞ্জস্যপূর্ণ দৈনিক দিনচর্যা প্রয়োজন...",
+      "author": "Dr. Md. Ripon Ali",
+      "category": "oral-health",
+      "featured_image": "https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "tags": ["dental-care", "teeth", "health"],
+      "published": true,
+      "views": 150,
+      "created_at": "2024-11-01T00:00:00Z"
+    },
+    {
+      "id": "blog-2",
+      "title": "The Importance of Regular Dental Checkups",
+      "title_bn": "নিয়মিত দন্ত পরীক্ষার গুরুত্ব",
+      "slug": "importance-of-regular-dental-checkups",
+      "excerpt": "Understand why regular dental checkups are crucial for your oral health",
+      "excerpt_bn": "বুঝুন কেন নিয়মিত দন্ত পরীক্ষা আপনার মুখের স্বাস্থ্যের জন্য গুরুত্বপূর্ণ",
+      "content": "Regular dental checkups help detect problems early...",
+      "content_bn": "নিয়মিত দন্ত পরীক্ষা সমস্যা প্রাথমিকভাবে সনাক্ত করতে সাহায্য করে...",
+      "author": "Dr. Md. Ripon Ali",
+      "category": "preventive-care",
+      "featured_image": "https://images.pexels.com/photos/3831645/pexels-photo-3831645.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "tags": ["checkup", "prevention", "health"],
+      "published": true,
+      "views": 200,
+      "created_at": "2024-11-15T00:00:00Z"
+    }
+  ],
+  "gallery_images": [
+    {
+      "id": "gallery-1",
+      "title": "Clinic Reception Area",
+      "title_bn": "ক্লিনিক রিসেপশন এলাকা",
+      "category": "clinic_tour",
+      "image_url": "https://images.pexels.com/photos/3925517/pexels-photo-3925517.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "before_image_url": null,
+      "after_image_url": null,
+      "description": "Our modern and welcoming reception area",
+      "display_order": 1
+    },
+    {
+      "id": "gallery-2",
+      "title": "Treatment Room",
+      "title_bn": "চিকিৎসা কক্ষ",
+      "category": "clinic_tour",
+      "image_url": "https://images.pexels.com/photos/3931603/pexels-photo-3931603.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "before_image_url": null,
+      "after_image_url": null,
+      "description": "State-of-the-art treatment facility",
+      "display_order": 2
+    }
+  ]
+}
