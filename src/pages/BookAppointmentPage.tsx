@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
-import { Calendar, Clock, User, Phone, Mail, CheckCircle } from "lucide-react";
+import {
+  Calendar,
+  Clock,
+  User,
+  Phone,
+  Mail,
+  CheckCircle,
+  ChevronDown,
+} from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useAuth } from "../contexts/AuthContext";
 import { supabase } from "../lib/supabase";
@@ -14,6 +22,7 @@ export function BookAppointmentPage({ onNavigate }: BookAppointmentPageProps) {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
+  const [timeDropdownOpen, setTimeDropdownOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     patientName: "",
@@ -24,15 +33,20 @@ export function BookAppointmentPage({ onNavigate }: BookAppointmentPageProps) {
     notes: "",
   });
 
+  // Time slots in 24-hour format
   const timeSlots = [
     "09:00",
     "10:00",
     "11:00",
+    "12:00",
+    "13:00",
     "14:00",
     "15:00",
     "16:00",
     "17:00",
     "18:00",
+    "19:00",
+    "20:00",
   ];
 
   // Check authentication and pre-fill user data
@@ -145,7 +159,7 @@ export function BookAppointmentPage({ onNavigate }: BookAppointmentPageProps) {
                 onChange={(e) =>
                   setFormData({ ...formData, patientName: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               />
             </div>
 
@@ -161,7 +175,7 @@ export function BookAppointmentPage({ onNavigate }: BookAppointmentPageProps) {
                 onChange={(e) =>
                   setFormData({ ...formData, patientEmail: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               />
             </div>
 
@@ -177,7 +191,7 @@ export function BookAppointmentPage({ onNavigate }: BookAppointmentPageProps) {
                 onChange={(e) =>
                   setFormData({ ...formData, patientPhone: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               />
             </div>
 
@@ -194,7 +208,7 @@ export function BookAppointmentPage({ onNavigate }: BookAppointmentPageProps) {
                 onChange={(e) =>
                   setFormData({ ...formData, appointmentDate: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               />
             </div>
 
@@ -203,21 +217,69 @@ export function BookAppointmentPage({ onNavigate }: BookAppointmentPageProps) {
                 <Clock className="inline h-4 w-4 mr-1" />
                 {t("Time", "সময়")}
               </label>
-              <select
-                required
-                value={formData.appointmentTime}
-                onChange={(e) =>
-                  setFormData({ ...formData, appointmentTime: e.target.value })
-                }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">{t("Select time", "সময় নির্বাচন")}</option>
-                {timeSlots.map((time) => (
-                  <option key={time} value={time}>
-                    {time}
-                  </option>
-                ))}
-              </select>
+
+              {/* Custom Dropdown for Time Selection */}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setTimeDropdownOpen(!timeDropdownOpen)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white text-left flex items-center justify-between hover:border-gray-400"
+                >
+                  <span
+                    className={
+                      formData.appointmentTime
+                        ? "text-gray-900"
+                        : "text-gray-500"
+                    }
+                  >
+                    {formData.appointmentTime ||
+                      t("Select time", "সময় নির্বাচন")}
+                  </span>
+                  <ChevronDown
+                    className={`h-5 w-5 text-gray-400 transition-transform ${
+                      timeDropdownOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {timeDropdownOpen && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-auto">
+                    {timeSlots.map((time) => (
+                      <button
+                        key={time}
+                        type="button"
+                        onClick={() => {
+                          setFormData({ ...formData, appointmentTime: time });
+                          setTimeDropdownOpen(false);
+                        }}
+                        className={`w-full px-4 py-3 text-left hover:bg-blue-50 transition-colors flex items-center justify-between ${
+                          formData.appointmentTime === time
+                            ? "bg-blue-50 text-blue-700"
+                            : "text-gray-900"
+                        }`}
+                      >
+                        <span className="flex items-center">
+                          <Clock className="h-4 w-4 mr-2 text-gray-400" />
+                          {time}
+                        </span>
+                        {formData.appointmentTime === time && (
+                          <svg
+                            className="h-5 w-5 text-blue-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             <div>
@@ -230,14 +292,18 @@ export function BookAppointmentPage({ onNavigate }: BookAppointmentPageProps) {
                 onChange={(e) =>
                   setFormData({ ...formData, notes: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                placeholder={t(
+                  "Any additional information...",
+                  "যেকোনো অতিরিক্ত তথ্য..."
+                )}
               />
             </div>
 
             <button
               type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white py-3 rounded-full hover:from-blue-700 hover:to-teal-600 transition font-semibold disabled:opacity-50"
+              disabled={loading || !formData.appointmentTime}
+              className="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white py-3 rounded-lg hover:from-blue-700 hover:to-teal-600 transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
             >
               {loading
                 ? t("Booking...", "বুক করা হচ্ছে...")
