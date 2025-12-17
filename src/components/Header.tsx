@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X, Phone, Clock, Globe, User } from "lucide-react";
+import { Menu, X, Phone, Clock, Globe, User, LogIn } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -19,6 +19,58 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
     { name: t("Services", "সেবা"), href: "services" },
     { name: t("Contact", "যোগাযোগ"), href: "contact" },
   ];
+
+  const handleBookAppointment = () => {
+    if (!user) {
+      // Redirect to login page if not authenticated
+      onNavigate("login");
+      setMobileMenuOpen(false);
+      return;
+    }
+    // If user is logged in, proceed to booking
+    onNavigate("book-appointment");
+    setMobileMenuOpen(false);
+  };
+
+  const renderAuthButtons = () => {
+    if (!user) {
+      return (
+        <button
+          onClick={() => onNavigate("login")}
+          className="flex items-center space-x-1 hover:text-blue-100 transition"
+        >
+          <LogIn className="h-4 w-4" />
+          <span className="hidden md:inline">{t("Login", "লগইন")}</span>
+        </button>
+      );
+    }
+
+    return (
+      <div className="flex items-center space-x-2">
+        <button
+          onClick={() => {
+            onNavigate("patient-portal");
+            setMobileMenuOpen(false);
+          }}
+          className="flex items-center space-x-1 hover:text-blue-100 transition"
+        >
+          <User className="h-4 w-4" />
+          <span className="hidden md:inline">
+            {t("My Account", "আমার অ্যাকাউন্ট")}
+          </span>
+        </button>
+        <button
+          onClick={() => {
+            signOut();
+            setMobileMenuOpen(false);
+          }}
+          className="hover:text-blue-100 transition text-xs"
+        >
+          {t("Logout", "লগআউট")}
+        </button>
+      </div>
+    );
+  };
 
   return (
     <header className="bg-white shadow-md fixed w-full top-0 z-50">
@@ -51,25 +103,7 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
                 <Globe className="h-4 w-4" />
                 <span>{language === "en" ? "বাংলা" : "English"}</span>
               </button>
-              {user && (
-                <div className="flex items-center space-x-2">
-                  <button
-                    onClick={() => onNavigate("patient-portal")}
-                    className="flex items-center space-x-1 hover:text-blue-100 transition"
-                  >
-                    <User className="h-4 w-4" />
-                    <span className="hidden md:inline">
-                      <span>{t("My Account", "আমার অ্যাকাউন্ট")}</span>
-                    </span>
-                  </button>
-                  <button
-                    onClick={signOut}
-                    className="hover:text-blue-100 transition text-xs"
-                  >
-                    {t("Logout", "লগআউট")}
-                  </button>
-                </div>
-              )}
+              {renderAuthButtons()}
             </div>
           </div>
         </div>
@@ -101,7 +135,7 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
               </button>
             ))}
             <button
-              onClick={() => onNavigate("book-appointment")}
+              onClick={handleBookAppointment}
               className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-2 rounded-full hover:from-blue-700 hover:to-teal-600 transition transform hover:scale-105 font-medium"
             >
               {t("Book Appointment", "অ্যাপয়েন্টমেন্ট বুক করুন")}
@@ -141,10 +175,7 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
               </button>
             ))}
             <button
-              onClick={() => {
-                onNavigate("book-appointment");
-                setMobileMenuOpen(false);
-              }}
+              onClick={handleBookAppointment}
               className="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white px-4 py-2 rounded-md hover:from-blue-700 hover:to-teal-600 transition font-medium"
             >
               {t("Book Appointment", "অ্যাপয়েন্টমেন্ট বুক করুন")}
