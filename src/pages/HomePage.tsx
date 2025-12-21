@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { heroImage } from "../constants/constants";
+import heroImage from "../assets/images/image.png";
 import {
   Users,
   Clock,

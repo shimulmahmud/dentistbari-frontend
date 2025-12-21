@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 
-import { heroImage } from "../constants/constants";
+import heroImage from "../assets/images/image.png";
 
 interface AboutPageProps {
   onNavigate: (page: string) => void;
