@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useAuth } from "../contexts/AuthContext";
-import { supabase } from "../lib/supabase";
 
 // Import modular components
 import { LoadingState } from "../components/appointment-booking/LoadingState";
@@ -123,7 +122,11 @@ export function BookAppointmentPage({ onNavigate }: BookAppointmentPageProps) {
     setLoading(true);
 
     try {
-      const { error } = await supabase.from("appointments").insert({
+      // Persist appointment locally since DB integration was removed
+      await new Promise((r) => setTimeout(r, 300));
+      const existing = JSON.parse(localStorage.getItem("appointments") || "[]");
+      existing.push({
+        id: Date.now(),
         patient_id: user.id,
         patient_name: formData.patientName,
         patient_email: formData.patientEmail,
@@ -133,9 +136,9 @@ export function BookAppointmentPage({ onNavigate }: BookAppointmentPageProps) {
         notes: formData.notes,
         service_slug: selectedService,
         status: "pending",
+        created_at: new Date().toISOString(),
       });
-
-      if (error) throw error;
+      localStorage.setItem("appointments", JSON.stringify(existing));
       setSubmitted(true);
     } catch (error) {
       console.error("Appointment booking error:", error);

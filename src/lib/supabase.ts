@@ -1,11 +1,13 @@
-import { createClient } from '@supabase/supabase-js';
-import type { Database } from './types/database';
+// Supabase integration removed. This file provides a harmless stub
+// to avoid runtime errors if something still imports it.
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
-}
-
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
+export const supabase = {
+  from: () => ({
+    insert: async () => ({ error: new Error('Supabase integration removed') }),
+    select: async () => ({ data: [], error: null }),
+  }),
+  auth: {
+    signIn: async () => ({ error: new Error('Supabase integration removed') }),
+    signOut: async () => ({ error: new Error('Supabase integration removed') }),
+  },
+};
