@@ -142,7 +142,10 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
               onClick={() => onNavigate("home")}
               className="text-2xl font-bold text-slate-800 hover:text-teal-600 transition-colors duration-300"
             >
-              <span className="text-teal-600">Dentist</span> Bari
+              <span className="text-teal-600">
+                {language === "en" ? "Dentist" : "ডেন্টিস্ট"}
+              </span>{" "}
+              {language === "en" ? "Bari" : "বাড়ি"}
             </button>
           </div>
 
