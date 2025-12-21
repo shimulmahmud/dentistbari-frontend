@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 
+import { heroImage } from "../constants/constants";
+
 interface AboutPageProps {
   onNavigate: (page: string) => void;
 }
@@ -155,7 +157,7 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
               <img
-                src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?q=80&w=2070"
+                src={heroImage}
                 alt="Dr. Md. Ripon Ali"
                 className="rounded-2xl shadow-2xl w-full"
               />

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { heroImage } from "../constants/constants";
 import {
   Users,
   Clock,
@@ -65,8 +66,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
         "Professional teeth whitening for a brighter smile",
         "উজ্জ্বল হাসির জন্য পেশাদার দাঁত সাদা করা"
       ),
-      image:
-        "https://images.unsplash.com/photo-1600950335869-476ffcbf2487?q=80&w=2070",
+      image: heroImage,
     },
     {
       id: 2,
@@ -75,8 +75,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
         "Permanent solution for missing teeth",
         "হারানো দাঁতের জন্য স্থায়ী সমাধান"
       ),
-      image:
-        "https://images.unsplash.com/photo-1587116570355-5439db19621f?q=80&w=1974",
+      image: heroImage,
     },
     {
       id: 3,
@@ -85,8 +84,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
         "Straighten your teeth with modern braces",
         "আধুনিক ব্রেস দিয়ে আপনার দাঁত সোজা করুন"
       ),
-      image:
-        "https://images.unsplash.com/photo-1550745165-9bc0b252726a?q=80&w=2070",
+      image: heroImage,
     },
     {
       id: 4,
@@ -95,8 +93,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
         "Enhance your smile with our cosmetic procedures",
         "আমাদের সৌন্দর্যবর্ধক পদ্ধতিতে আপনার হাসি উন্নত করুন"
       ),
-      image:
-        "https://images.unsplash.com/photo-1598366812406-8b3f1a1a0b23?q=80&w=2070",
+      image: heroImage,
     },
   ];
 
@@ -325,22 +322,6 @@ export function HomePage({ onNavigate }: HomePageProps) {
                     </div>
                   </>
                 )}
-              </div>
-
-              <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-xl p-4 text-gray-900">
-                <div className="flex items-center space-x-3">
-                  <div className="bg-teal-100 p-2 rounded-full">
-                    <CheckCircle className="h-5 w-5 text-teal-600" />
-                  </div>
-                  <div>
-                    <div className="font-semibold">
-                      {t("Available Today", "আজ উপলব্ধ")}
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      {t("Book your slot", "আপনার স্লট বুক করুন")}
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
