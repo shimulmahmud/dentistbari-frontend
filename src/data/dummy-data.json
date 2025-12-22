@@ -74,7 +74,32 @@
         "Improved confidence",
         "Enhanced appearance"
       ],
-      "procedure_steps": ["Consultation", "Design", "Treatment", "Follow-up"],
+      "procedure_steps": [
+        {
+          "title": "Consultation",
+          "title_bn": "পরামর্শ",
+          "description": "We'll discuss your goals, analyze your facial structure, and create a personalized treatment plan to achieve the smile you desire.",
+          "description_bn": "আমরা আপনার লক্ষ্যগুলো আলোচনা করব, আপনার মুখের গঠন বিশ্লেষণ করব এবং আপনার যে হাসি কামনা করতে চাইতে একটি ব্যক্তিগতকৃত চিকিৎসা পরিকল্পনা তৈরি করব।"
+        },
+        {
+          "title": "Design",
+          "title_bn": "ডিজাইন",
+          "description": "Using digital imaging and mock-ups, we will design the perfect shape, size, and color for your new smile.",
+          "description_bn": "ডিজিটাল ইমেজিং এবং মক-আপ ব্যবহার করে, আমরা আপনার নতুন হাসির জন্য নিখুঁত আকৃতি, আকার এবং রং ডিজাইন করব।"
+        },
+        {
+          "title": "Treatment",
+          "title_bn": "চিকিৎসা",
+          "description": "This is the main phase where procedures like whitening, veneers, or bonding are performed with precision.",
+          "description_bn": "এটি মূল পর্যায় যেখান হয় সাদা করা, ভিনিয়ার বা বন্ডিং এর মতো পদ্ধতি নির্ভুলতা এবং যত্ন সহকারে সম্পাদন করা হবে।"
+        },
+        {
+          "title": "Follow-up",
+          "title_bn": "ফলো-আপ",
+          "description": "We'll schedule follow-up appointments to ensure you are satisfied with the results and to maintain your new smile.",
+          "description_bn": "আপনি ফলাফলে সন্তুষ্ট কিনা কিনা এবং আপনার নতুন হাসি বজায় রাখতে আমরা ফলো-আপ অ্যাপয়েন্টমেন্ট নির্ধারণ করব।"
+        }
+      ],
       "is_featured": true,
       "display_order": 2
     },
