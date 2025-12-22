@@ -2,7 +2,10 @@ import {
   Award,
   GraduationCap,
   Heart,
+  BriefcaseIcon,
+  Activity,
   Target,
+  Sparkles,
   Users,
   Calendar,
   MapPin,
@@ -10,8 +13,11 @@ import {
   CheckCircle,
   Clock,
   Shield,
+  Star,
   Stethoscope,
+  ChevronDown,
 } from "lucide-react";
+import { useState } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
 
 import heroImage from "../assets/images/image.png";
@@ -22,6 +28,10 @@ interface AboutPageProps {
 
 export function AboutPage({ onNavigate }: AboutPageProps) {
   const { t } = useLanguage();
+
+  // --- ADD THIS LINE FOR ACCORDION FUNCTIONALITY ---
+  // This state keeps track of which specialization accordion is open. `null` means all are closed.
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const values = [
     {
@@ -119,195 +129,242 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
   ];
 
   const specializations = [
-    t("Prosthodontics", "প্রস্থেডন্টিক্স"),
-    t("Implant Dentistry", "ইমপ্লান্ট ডেন্টিস্ট্রি"),
-    t("Cosmetic Dentistry", "সৌন্দর্যবর্ধক দন্ত চিকিৎসা"),
-    t("Full Mouth Rehabilitation", "সম্পূর্ণ মুখ পুনর্বাসন"),
-    t("Smile Makeover", "হাসি পুনর্গঠন"),
+    {
+      name: t("Prosthodontics", "প্রস্থেডন্টিক্স"),
+      description: t(
+        "The branch of dentistry that focuses on designing, fitting, and placing artificial replacements for teeth and other parts of the mouth.",
+        "দন্তচিকিৎসার এমন একটি শাখা যা দাঁত এবং মুখের অন্যান্য অংশের কৃত্রিম প্রতিস্থাপন ডিজাইন, ফিটিং এবং স্থাপনের উপর দৃষ্টি নিবদ্ধ করে।"
+      ),
+    },
+    {
+      name: t("Implant Dentistry", "ইমপ্লান্ট ডেন্টিস্ট্রি"),
+      description: t(
+        "A revolutionary tooth replacement option that uses titanium posts surgically placed in the jawbone to serve as artificial roots.",
+        "একটি বিপ্লবী দাঁত প্রতিস্থাপন বিকল্প যা আর্টিফিশিয়াল রুট হিসাবে কাজ করার জন্য জবড়ার হাড়ের মধ্যে শল্যচিকিৎসাভাবে স্থাপন করা টাইটানিয়াম পোস্ট ব্যবহার করে।"
+      ),
+    },
+    {
+      name: t("Cosmetic Dentistry", "সৌন্দর্যবর্ধক দন্ত চিকিৎসা"),
+      description: t(
+        "Focused on improving the appearance of your teeth, smile, and mouth through various dental procedures.",
+        "বিভিন্ন দন্ত চিকিৎসা পদ্ধতির মাধ্যমে আপনার দাঁত, হাসি এবং মুখের উপস্থিতি উন্নত করার উপর মনোযোগ দেওয়া হয়।"
+      ),
+    },
+    {
+      name: t("Full Mouth Rehabilitation", "সম্পূর্ণ মুখ পুনর্বাসন"),
+      description: t(
+        "A comprehensive process of restoring the function, health, and aesthetics of all the teeth in both the upper and lower jaws.",
+        "উভয় উপরের এবং নিচের চোয়ালে সমস্ত দাঁতের কার্যকারিতা, স্বাস্থ্য এবং নান্দনিকতা পুনরুদ্ধারের একটি বিস্তৃত প্রক্রিয়া।"
+      ),
+    },
+    {
+      name: t("Smile Makeover", "হাসি পুনর্গঠন"),
+      description: t(
+        "A customized treatment plan designed to improve the overall appearance of your smile through one or more cosmetic dentistry procedures.",
+        "এক বা একাধিক সৌন্দর্যবর্ধক দন্ত চিকিৎসা পদ্ধতির মাধ্যমে আপনার হাসির সামগ্রিক উপস্থিতি উন্নত করার জন্য ডিজাইন করা একটি কাস্টমাইজড চিকিৎসা পরিকল্পনা।"
+      ),
+    },
   ];
-
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
+      {/* Hero and About Combined Section */}
       <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-cyan-900/30 to-slate-900/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-900/20 to-slate-900/50" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
-          <div className="text-center">
-            <div className="inline-flex items-center px-4 py-2 bg-teal-500/20 border border-teal-500/30 rounded-full text-sm font-medium text-teal-200 backdrop-blur-sm mb-6">
-              <CheckCircle className="h-4 w-4 mr-2" />
-              {t("15+ Years of Excellence", "১৫+ বছরের শ্রেষ্ঠত্ব")}
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
-              {t("About Dr. Md. Ripon Ali", "ডাঃ মোঃ রিপন আলী সম্পর্কে")}
-            </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              {t(
-                "Dedicated to providing exceptional dental care with a focus on patient comfort and cutting-edge technology",
-                "রোগীর আরাম এবং অত্যাধুনিক প্রযুক্তির উপর ফোকাস সহ ব্যতিক্রমী দন্ত চিকিৎসা প্রদানে নিবেদিত"
-              )}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section className="relative bg-gradient-to-br from-slate-50 to-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left: Text */}
             <div>
+              <div className="inline-flex items-center px-4 py-2 mb-6 bg-teal-500/20 border border-teal-500/30 rounded-full text-sm font-medium text-teal-200 backdrop-blur-sm">
+                <CheckCircle className="h-4 w-4 mr-2" />
+                {t("15+ Years of Excellence", "১৫+ বছরের শ্রেষ্ঠত্ব")}
+              </div>
+
+              <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6">
+                {t("Dr. Md. Ripon Ali", "ডাঃ মোঃ রিপন আলী")}
+              </h1>
+
+              <p className="text-lg text-teal-300 font-medium mb-3">
+                {t(
+                  "Senior Prosthodontist & Implant Specialist",
+                  "সিনিয়র প্রস্থেডন্টিস্ট ও ইমপ্লান্ট বিশেষজ্ঞ"
+                )}
+              </p>
+
+              <p className="text-lg text-gray-300 leading-relaxed max-w-xl mb-6">
+                {t(
+                  "Dr. Ripon Ali is a highly skilled prosthodontist who graduated from the University of Dhaka with a BDS degree and later obtained his MDS in Prosthodontics. With over 15 years of experience, he provides advanced, patient-focused dental care with modern technology.",
+                  "ডাঃ রিপন আলী একজন অত্যন্ত দক্ষ প্রস্থেডন্টিস্ট যিনি ঢাকা বিশ্ববিদ্যালয় থেকে বিডিএস ডিগ্রি নিয়ে স্নাতক হন এবং পরবর্তীতে প্রস্থেডন্টিক্সে এমডিএস অর্জন করেন। ১৫ বছরেরও বেশি অভিজ্ঞতার সাথে, তিনি আধুনিক প্রযুক্তির মাধ্যমে উন্নত ও রোগী-কেন্দ্রিক দন্ত চিকিৎসা প্রদান করেন।"
+                )}
+              </p>
+
+              {/* Minimalist Inline Statistics */}
+              <p className="text-sm text-gray-400 mb-6">
+                <span className="font-semibold text-teal-300">15+</span>{" "}
+                {t("Years", "বছর")} |
+                <span className="font-semibold text-teal-300"> 5000+</span>{" "}
+                {t("Patients", "রোগী")} |
+                <span className="font-semibold text-teal-300"> 98%</span>{" "}
+                {t("Success Rate", "সাফল্যের হার")} |
+                <span className="font-semibold text-teal-300"> 12+</span>{" "}
+                {t("Awards", "পুরস্কার")}
+              </p>
+
+              <div className="flex flex-wrap gap-4">
+                <button
+                  onClick={() => onNavigate("book-appointment")}
+                  className="bg-teal-600 hover:bg-teal-700 text-white px-7 py-3 rounded-full font-semibold transition shadow-lg"
+                >
+                  {t("Book Appointment", "অ্যাপয়েন্টমেন্ট বুক করুন")}
+                </button>
+
+                <button
+                  onClick={() => onNavigate("contact")}
+                  className="border border-white/30 px-7 py-3 rounded-full font-semibold text-white hover:bg-white/10 transition"
+                >
+                  {t("Contact Clinic", "ক্লিনিকে যোগাযোগ করুন")}
+                </button>
+              </div>
+            </div>
+
+            {/* Right: Image */}
+            <div className="relative">
+              <div className="absolute -inset-4 bg-teal-500/10 rounded-3xl blur-2xl" />
               <img
                 src={heroImage}
                 alt="Dr. Md. Ripon Ali"
-                className="rounded-2xl shadow-2xl w-full"
+                className="relative rounded-3xl shadow-2xl w-full object-cover"
               />
-            </div>
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-                  {t(
-                    "Meet Dr. Md. Ripon Ali",
-                    "ডাঃ মোঃ রিপন আলীর সাথে দেখা করুন"
-                  )}
-                </h2>
-                <p className="text-lg text-slate-600 leading-relaxed">
-                  {t(
-                    "Dr. Ripon Ali is a highly skilled prosthodontist with over 15 years of experience in dental care. He graduated from the University of Dhaka with a BDS degree and later obtained his MDS in Prosthodontics. His commitment to excellence and patient satisfaction has made him one of the most trusted dentists in the region.",
-                    "ডাঃ রিপন আলী একজন অত্যন্ত দক্ষ প্রস্থেডন্টিস্ট যার দন্ত চিকিৎসায় ১৫ বছরেরও বেশি অভিজ্ঞতা রয়েছে। তিনি ঢাকা বিশ্ববিদ্যালয় থেকে বিডিএস ডিগ্রি নিয়ে স্নাতক হন এবং পরবর্তীতে প্রস্থেডন্টিক্সে এমডিএস অর্জন করেন। শ্রেষ্ঠত্ব এবং রোগী সন্তুষ্টির প্রতি তার প্রতিশ্রুতি তাকে অঞ্চলের সবচেয়ে বিশ্বস্ত দন্ত চিকিৎসকদের একজন করে তুলেছে।"
-                  )}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white p-4 rounded-xl shadow-md border border-slate-100">
-                  <div className="text-2xl font-bold text-teal-600">15+</div>
-                  <div className="text-sm text-slate-600">
-                    {t("Years Experience", "বছরের অভিজ্ঞতা")}
-                  </div>
-                </div>
-                <div className="bg-white p-4 rounded-xl shadow-md border border-slate-100">
-                  <div className="text-2xl font-bold text-teal-600">5000+</div>
-                  <div className="text-sm text-slate-600">
-                    {t("Happy Patients", "সন্তুষ্ট রোগী")}
-                  </div>
-                </div>
-                <div className="bg-white p-4 rounded-xl shadow-md border border-slate-100">
-                  <div className="text-2xl font-bold text-teal-600">98%</div>
-                  <div className="text-sm text-slate-600">
-                    {t("Success Rate", "সাফল্যের হার")}
-                  </div>
-                </div>
-                <div className="bg-white p-4 rounded-xl shadow-md border border-slate-100">
-                  <div className="text-2xl font-bold text-teal-600">12+</div>
-                  <div className="text-sm text-slate-600">
-                    {t("Awards", "পুরস্কার")}
-                  </div>
-                </div>
-              </div>
-
-              <button
-                onClick={() => onNavigate("book-appointment")}
-                className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-              >
-                {t("Book Appointment", "অ্যাপয়েন্টমেন্ট বুক করুন")}
-              </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Education Section */}
+      {/* Education Section - Refined Professional Design */}
       <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-900/20 to-slate-900/40"></div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="text-center mb-12">
+          <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               {t("Education & Credentials", "শিক্ষা ও যোগ্যতা")}
             </h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-amber-400 to-teal-400 mx-auto mb-6 rounded-full"></div>
             <p className="text-lg text-gray-300 max-w-2xl mx-auto">
               {t(
-                "Extensive education and training in prosthodontics and implant dentistry",
-                "প্রস্থেডন্টিক্স এবং ইমপ্লান্ট ডেন্টিস্ট্রিতে ব্যাপক শিক্ষা এবং প্রশিক্ষণ"
+                "A foundation of excellence built upon rigorous education and specialized training.",
+                "কঠোর শিক্ষা এবং বিশেষায়িত প্রশিক্ষণের উপর প্রতিষ্ঠিত শ্রেষ্ঠত্বের ভিত্তি।"
               )}
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="max-w-4xl mx-auto space-y-8">
             {education.map((edu, index) => (
               <div
                 key={index}
-                className="bg-white/10 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/20"
+                className="relative flex items-start pl-20 group transition-all duration-300"
               >
-                <div className="flex items-start space-x-4">
-                  <div className="bg-teal-500/20 p-3 rounded-lg border border-teal-500/30">
-                    <GraduationCap className="h-6 w-6 text-teal-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-white mb-1">
-                      {edu.degree}
-                    </h3>
-                    <p className="text-gray-300 mb-1">{edu.institution}</p>
-                    <p className="text-sm text-teal-400 font-medium mb-2">
-                      {edu.year}
-                    </p>
-                    <p className="text-gray-400 text-sm">{edu.description}</p>
-                  </div>
+                {/* Numbered Circle */}
+                <div className="absolute left-0 top-0 flex items-center justify-center w-14 h-14 border-2 border-amber-400/30 rounded-full">
+                  <span className="text-2xl font-bold text-amber-400/80 group-hover:text-amber-300 transition-colors duration-300">
+                    0{index + 1}
+                  </span>
                 </div>
+
+                {/* Content */}
+                <div className="flex-grow">
+                  <h3 className="text-xl font-bold text-white mb-1">
+                    {edu.degree}
+                  </h3>
+                  <p className="text-base text-gray-300 mb-1">
+                    {edu.institution}
+                  </p>
+                  <p className="text-sm font-semibold text-amber-400/90 mb-3">
+                    {edu.year}
+                  </p>
+                  <p className="text-gray-400 text-sm leading-relaxed">
+                    {edu.description}
+                  </p>
+                </div>
+
+                {/* Elegant Separator */}
+                {index < education.length - 1 && (
+                  <div className="absolute bottom-0 left-20 right-0 h-px bg-gradient-to-r from-slate-600 via-amber-400/20 to-transparent"></div>
+                )}
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Experience Section */}
-      <section className="relative bg-gradient-to-br from-slate-50 to-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+      {/* Experience Section - Refined Professional List Design */}
+      <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
+        {/* Background Overlay for depth */}
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-900/20 to-slate-900/40"></div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          {/* Section Header */}
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               {t("Professional Experience", "পেশাদার অভিজ্ঞতা")}
             </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <div className="w-24 h-1 bg-gradient-to-r from-amber-400 to-teal-400 mx-auto mb-6 rounded-full"></div>
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
               {t(
-                "Over 15 years of dedicated service in dental care",
-                "দন্ত চিকিৎসায় ১৫ বছরেরও বেশি নিবেদিত সেবা"
+                "A journey of professional growth and dedicated service in dental care.",
+                "দন্ত চিকিৎসায় পেশাগত প্রবৃদ্ধি এবং নিবেদিত সেবার একটি যাত্রা।"
               )}
             </p>
           </div>
 
-          <div className="space-y-6">
+          {/* Experience List */}
+          <div className="max-w-4xl mx-auto">
             {experience.map((exp, index) => (
               <div
                 key={index}
-                className="bg-white p-6 rounded-xl shadow-lg border border-slate-100 hover:shadow-xl transition-all duration-300"
+                className="relative flex items-start pl-20 pb-10 group hover:bg-white/5 -mx-4 px-4 rounded-lg transition-all duration-300"
               >
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-3">
-                  <h3 className="text-xl font-bold text-slate-900">
+                {/* Professional Icon Marker */}
+                <div className="absolute left-0 top-1 flex items-center justify-center w-12 h-12 border-2 border-amber-400/50 rounded-full bg-slate-800">
+                  <Stethoscope className="h-6 w-6 text-amber-400" />
+                </div>
+
+                {/* Content */}
+                <div>
+                  <h3 className="text-xl font-bold text-white mb-1">
                     {exp.position}
                   </h3>
-                  <span className="text-teal-600 font-medium">
-                    {exp.period}
-                  </span>
+                  <p className="text-base text-amber-400/90 font-semibold mb-2">
+                    {exp.organization}
+                  </p>
+                  <p className="text-sm text-gray-400 mb-3">{exp.period}</p>
+                  <p className="text-gray-300 text-sm leading-relaxed">
+                    {exp.description}
+                  </p>
                 </div>
-                <p className="text-slate-700 font-medium mb-2">
-                  {exp.organization}
-                </p>
-                <p className="text-slate-600">{exp.description}</p>
+
+                {/* Elegant Separator */}
+                {index < experience.length - 1 && (
+                  <div className="absolute bottom-0 left-20 right-0 h-px bg-gradient-to-r from-slate-600 via-amber-400/20 to-transparent"></div>
+                )}
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Specializations Section */}
+      {/* Specializations Section - Accordion Design */}
       <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-900/20 to-slate-900/40"></div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="text-center mb-12">
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          {/* Section Header */}
+          <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               {t("Areas of Specialization", "বিশেষজ্ঞতার ক্ষেত্রগুলি")}
             </h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-amber-400 to-teal-400 mx-auto mb-6 rounded-full"></div>
             <p className="text-lg text-gray-300 max-w-2xl mx-auto">
               {t(
                 "Expertise in various aspects of modern dentistry",
@@ -316,30 +373,67 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {specializations.map((spec, index) => (
-              <div
-                key={index}
-                className="bg-white/10 backdrop-blur-sm rounded-lg p-4 flex items-center space-x-3 border border-white/20"
-              >
-                <div className="bg-teal-500/20 p-2 rounded-lg border border-teal-500/30">
-                  <Stethoscope className="h-5 w-5 text-teal-400" />
+          {/* Accordion Container */}
+          <div className="space-y-4">
+            {specializations.map((spec, index) => {
+              const isOpen = openIndex === index;
+              return (
+                <div
+                  key={index}
+                  className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg overflow-hidden"
+                >
+                  {/* Accordion Header (Clickable) */}
+                  <button
+                    onClick={() => setOpenIndex(isOpen ? null : index)}
+                    className="w-full flex items-center justify-between p-4 text-left hover:bg-white/10 transition-colors duration-300"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div className="bg-teal-500/10 p-2 rounded-lg">
+                        <Activity className="h-5 w-5 text-teal-400" />
+                      </div>
+                      <span className="text-white font-medium text-lg">
+                        {spec.name}
+                      </span>
+                    </div>
+                    <ChevronDown
+                      className={`h-5 w-5 text-gray-400 transition-transform duration-300 ${
+                        isOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {/* Accordion Body (Collapsible) */}
+                  <div
+                    className={`grid transition-all duration-500 ease-in-out ${
+                      isOpen
+                        ? "grid-rows-[1fr] opacity-100"
+                        : "grid-rows-[0fr] opacity-0"
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <div className="p-4 pt-0 text-gray-300 border-t border-white/5">
+                        {spec.description}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <span className="text-white font-medium">{spec}</span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* Values Section */}
-      <section className="relative bg-gradient-to-br from-slate-50 to-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+      {/* Values Section - Redesigned */}
+      <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-900/20 to-slate-900/40"></div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               {t("Our Values", "আমাদের মূল্যবোধ")}
             </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <div className="w-24 h-1 bg-gradient-to-r from-amber-400 to-teal-400 mx-auto mb-6 rounded-full"></div>
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
               {t(
                 "Principles that guide our practice and patient care",
                 "আমাদের অনুশীলন এবং রোগী যত্নকে পরিচালিত করে এমন নীতিগুলি"
@@ -347,16 +441,23 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
             {values.map((value, index) => (
-              <div key={index} className="text-center">
-                <div className="bg-gradient-to-br from-slate-100 to-slate-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <value.icon className="h-8 w-8 text-slate-700" />
+              <div
+                key={index}
+                className="flex items-start space-x-4 p-4 rounded-lg border-l-4 border-amber-400/50 bg-white/5 hover:bg-white/10 transition-colors duration-300"
+              >
+                <div className="bg-amber-500/10 p-2 rounded-lg">
+                  <value.icon className="h-6 w-6 text-amber-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-slate-900 mb-2">
-                  {value.title}
-                </h3>
-                <p className="text-slate-600">{value.description}</p>
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-1">
+                    {value.title}
+                  </h3>
+                  <p className="text-gray-300 text-sm leading-relaxed">
+                    {value.description}
+                  </p>
+                </div>
               </div>
             ))}
           </div>

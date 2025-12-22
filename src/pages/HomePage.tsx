@@ -455,6 +455,20 @@ export function HomePage({ onNavigate }: HomePageProps) {
                       className="w-full flex-shrink-0 px-8 py-12"
                     >
                       <div className="text-center">
+                        {/* Patient Image */}
+                        <div className="flex justify-center mb-6">
+                          <div className="relative h-24 w-24 rounded-full overflow-hidden border-4 border-teal-400/30 shadow-lg">
+                            <img
+                              src={
+                                testimonial.image_url ||
+                                "https://picsum.photos/seed/patient/200/200.jpg"
+                              }
+                              alt={testimonial.patient_name}
+                              className="h-full w-full object-cover"
+                            />
+                          </div>
+                        </div>
+
                         <div className="flex justify-center mb-6">
                           {[...Array(5)].map((_, i) => (
                             <Star
@@ -474,7 +488,9 @@ export function HomePage({ onNavigate }: HomePageProps) {
                           {testimonial.patient_name}
                         </div>
                         <div className="text-gray-300">
-                          {testimonial.profession || "Patient"}
+                          {testimonial.profession ||
+                            testimonial.treatment ||
+                            "Patient"}
                         </div>
                       </div>
                     </div>
