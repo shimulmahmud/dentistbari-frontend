@@ -14,6 +14,7 @@ import {
   Heart,
   Stethoscope,
   Activity,
+  ChevronDown,
 } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 import dummyData from "../data/dummy-data.json";
@@ -29,6 +30,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
   const [autoPlay, setAutoPlay] = useState(true);
   const [currentTreatment, setCurrentTreatment] = useState(0);
   const [treatmentAutoPlay, setTreatmentAutoPlay] = useState(true);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
   // Data arrays must be declared before useEffect hooks that use them
   const features = [
@@ -121,6 +123,43 @@ export function HomePage({ onNavigate }: HomePageProps) {
         "একই ছাদের নিচে আপনার সমস্ত দন্ত চিকিৎসা প্রয়োজনীয়তা"
       ),
       icon: Heart,
+    },
+  ];
+
+  const faqs = [
+    {
+      question: t(
+        "How often should I get a dental check-up?",
+        "আমি কত ঘন ঘন দন্ত পরীক্ষা করানো উচিত?"
+      ),
+      answer: t(
+        "We recommend a dental check-up and cleaning every six months for most patients. This allows us to detect any issues early and keep your teeth and gums healthy.",
+        "আমরা বেশিরভাগ রোগীর জন্য প্রতি ছয় মাসে একবার দন্ত পরীক্ষা এবং পরিষ্কার করার পরামর্শ দিই। এটি আমাদের কোনো সমস্যা তড়িৎ সনাক্ত করতে এবং আপনার দাঁত ও মাড়ি সুস্থ রাখতে সাহায্য করে।"
+      ),
+    },
+    {
+      question: t(
+        "What is the best way to whiten my teeth?",
+        "আমার দাঁত সাদা করার সেরা উপায় কি?"
+      ),
+      answer: t(
+        "Professional teeth whitening is the safest and most effective option. Over-the-counter products can sometimes cause sensitivity. We can provide a customized treatment plan for you.",
+        "পেশাদার দাঁত সাদা করা সবচেয়ে নিরাপদ এবং কার্যকর বিকল্প। ওভার-দ্য-কাউন্টার পণ্যগুলি কখনও কখনও সংবেদনশীলতা সৃষ্টি করতে পারে। আমরা আপনার জন্য একটি কাস্টমাইজড চিকিৎসা পরিকল্পনা প্রদান করতে পারি।"
+      ),
+    },
+    {
+      question: t("Are dental implants safe?", "দন্ত ইমপ্লান্ট কি নিরাপদ?"),
+      answer: t(
+        "Yes, dental implants are a very safe and well-established procedure. They are made of biocompatible materials like titanium, which fuse with your jawbone. Dr. Ripon Ali has extensive experience in implant dentistry.",
+        "হ্যাঁ, দন্ত ইমপ্লান্ট একটি খুবই নিরাপদ এবং প্রতিষ্ঠিত পদ্ধতি। এগুলি টাইটানিয়ামের মতো বায়োকম্পেটিবল উপকরণ দিয়ে তৈরি যা আপনার জবড়ার হাড়ের সাথে মিশে যায়। ডাঃ রিপন আলীর ইমপ্লান্ট ডেন্টিস্ট্রিতে ব্যাপক অভিজ্ঞতা রয়েছে।"
+      ),
+    },
+    {
+      question: t("Do you accept insurance?", "আপনি কি বীমা গ্রহণ করেন?"),
+      answer: t(
+        "Yes, we work with most major insurance providers. Please contact our clinic with your insurance information, and our staff will be happy to assist you with the process.",
+        "হ্যাঁ, আমরা বেশিরভাগ প্রধান বীমা প্রদানকারীর সাথে কাজ করি। আপনার বীমা তথ্য নিয়ে আমাদের ক্লিনিকে যোগাযোগ করুন, এবং প্রক্রিয়াটিতে আপনাকে সাহায্য করতে আমাদের কর্মীরা খুশি হবে।"
+      ),
     },
   ];
 
@@ -536,6 +575,76 @@ export function HomePage({ onNavigate }: HomePageProps) {
         </section>
       )}
 
+      {/* FAQ Section - Redesigned for Professionalism */}
+      <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-900/20 to-slate-900/40"></div>
+
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              {t("Frequently Asked Questions", "প্রায়শই জিজ্ঞাসিত প্রশ্নাবলী")}
+            </h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-amber-400 to-teal-400 mx-auto mb-6 rounded-full"></div>
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+              {t(
+                "Find answers to common questions about our services and dental care.",
+                "আমাদের পরিষেবা এবং দন্ত চিকিৎসা সম্পর্কে সাধারণ প্রশ্নের উত্তর খুঁজুন।"
+              )}
+            </p>
+          </div>
+
+          <div className="space-y-6">
+            {faqs.map((faq, index) => {
+              const isOpen = openFaqIndex === index;
+              return (
+                <div
+                  key={index}
+                  className={`
+                    bg-white/5 backdrop-blur-sm rounded-lg transition-all duration-300
+                    ${
+                      isOpen
+                        ? "bg-white/10 border-t-4 border-amber-400"
+                        : "hover:bg-white/10"
+                    }
+                  `}
+                >
+                  <button
+                    onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                    className="w-full text-left p-7 focus:outline-none"
+                  >
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-base font-semibold text-white pr-4">
+                        {faq.question}
+                      </h3>
+                      <ChevronDown
+                        className={`
+                          h-5 w-5 transition-transform duration-300 flex-shrink-0
+                          ${
+                            isOpen
+                              ? "rotate-180 text-amber-400"
+                              : "text-gray-400"
+                          }
+                        `}
+                      />
+                    </div>
+                  </button>
+                  <div
+                    className={`
+                      overflow-hidden transition-all duration-500 ease-in-out
+                      ${isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}
+                    `}
+                  >
+                    <p className="p-7 pt-0 text-gray-300 leading-relaxed">
+                      {faq.answer}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-900/30 to-slate-900/50"></div>
@@ -552,7 +661,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
           </h2>
           <p className="text-xl mb-8 text-gray-300 max-w-2xl mx-auto">
             {t(
-              "Schedule your consultation today and take first step towards a healthier, more confident smile",
+              "Schedule your consultation today and take the first step towards a healthier, more confident smile",
               "আজই আপনার পরামর্শের সময় নির্ধারণ করুন এবং স্বাস্থ্যকর, আত্মবিশ্বাসী হাসির প্রথম পদক্ষেপ নিন"
             )}
           </p>
