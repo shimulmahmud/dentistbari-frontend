@@ -12,6 +12,7 @@ export interface AuthUser {
   email: string;
   fullName: string;
   phone: string;
+  role?: "doctor" | "patient" | "admin";
 }
 
 interface AuthContextType {
@@ -31,6 +32,7 @@ interface AuthContextType {
     token: string,
     newPassword: string
   ) => Promise<void>;
+  isAdmin: () => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -62,6 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email: dbUser.email,
       fullName: dbUser.fullName,
       phone: dbUser.phone,
+      role: dbUser.role,
     };
 
     setUser(authUser);
@@ -88,17 +91,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       password,
       fullName,
       phone,
-    });
+      role: "patient",
+    } as any);
 
     const authUser: AuthUser = {
       id: newUser.id,
       email: newUser.email,
       fullName: newUser.fullName,
       phone: newUser.phone,
+      role: (newUser as any).role,
     };
 
     setUser(authUser);
     localStorage.setItem("dentist-bari-user", JSON.stringify(authUser));
+  };
+
+  const isAdmin = () => {
+    if (!user) return false;
+    const dbUser = db.getUserByEmail(user.email);
+    return !!dbUser && (dbUser.role === "admin" || dbUser.role === "doctor");
   };
 
   const signOut = async () => {
@@ -144,6 +155,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signOut,
         requestPasswordReset,
         resetPassword,
+        isAdmin,
       }}
     >
       {children}

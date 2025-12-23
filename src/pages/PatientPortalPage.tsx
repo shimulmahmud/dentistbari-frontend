@@ -2,14 +2,20 @@ import { useState, useEffect } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useAuth } from "../contexts/AuthContext";
 import { db } from "../lib/database";
+import { Menu } from "lucide-react";
+import { ToastProvider } from "../contexts/ToastContext";
+import { QuickActionButton } from "../components/patient-portal/QuickActionButton";
 
 // Import modular components
-import { DashboardHeader } from "../components/patient-portal/DashboardHeader";
+import { PortalSidebar } from "../components/patient-portal/PortalSidebar";
 import { DashboardStats } from "../components/patient-portal/DashboardStats";
 import { AppointmentsView } from "../components/patient-portal/AppointmentsView";
 import { MedicalRecordsView } from "../components/patient-portal/MedicalRecordsView";
 import { PrescriptionsView } from "../components/patient-portal/PrescriptionsView";
 import { LoginSignupView } from "../components/patient-portal/LoginSignupView";
+import { HealthReminders } from "../components/patient-portal/HealthReminders";
+import { AppointmentCalendar } from "../components/patient-portal/AppointmentCalendar";
+import { EnhancedAppointmentsTable } from "../components/patient-portal/EnhancedAppointmentsTable";
 
 interface PatientPortalPageProps {
   onNavigate: (page: string) => void;
@@ -42,6 +48,9 @@ export function PatientPortalPage({
 
   // Active tab for dashboard
   const [activeTab, setActiveTab] = useState("dashboard");
+
+  // Mobile sidebar state
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // UI state
   const [showPassword, setShowPassword] = useState(false);
@@ -202,36 +211,140 @@ export function PatientPortalPage({
     setView("login");
   };
 
-  // Render Dashboard View
+  // Render Dashboard View with new sidebar layout
   if (view === "dashboard" && user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-25 to-gray-50 py-6 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto space-y-6">
-          {/* Header Section */}
-          <DashboardHeader
+      <ToastProvider>
+        <div className="flex min-h-screen bg-gray-50">
+          {/* Sidebar */}
+          <PortalSidebar
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
             user={user}
             t={t}
             handleLogout={handleLogout}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
+            onNavigate={onNavigate}
+            isOpen={sidebarOpen}
+            setIsOpen={setSidebarOpen}
           />
 
           {/* Main Content */}
-          {activeTab === "dashboard" && <DashboardStats t={t} />}
+          <div className="flex-1 overflow-auto">
+            {/* Mobile header */}
+            <div className="md:hidden bg-white border-b border-gray-200 p-4 flex items-center justify-between sticky top-0 z-20">
+              <h1 className="text-lg font-semibold text-gray-900">
+                DentistBari
+              </h1>
+              <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="p-2 hover:bg-gray-100 rounded-lg"
+              >
+                <Menu className="h-6 w-6 text-gray-600" />
+              </button>
+            </div>
 
-          {activeTab === "appointments" && (
-            <AppointmentsView
-              t={t}
-              onNavigate={onNavigate}
-              appointments={appointments}
-            />
-          )}
+            {/* Content area */}
+            <div className="px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto space-y-6">
+              {/* Dashboard - with stats, calendar, and reminders */}
+              {activeTab === "dashboard" && (
+                <>
+                  {/* Welcome Header */}
+                  <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-8 text-white shadow-lg">
+                    <h1 className="text-3xl font-bold mb-2">
+                      {t("Welcome back", "স্বাগতম")} {user.fullName}! 👋
+                    </h1>
+                    <p className="text-blue-100">
+                      {t(
+                        "Here's a summary of your dental health journey",
+                        "আপনার দাঁতের স্বাস্থ্য যাত্রার সারসংক্ষেপ এখানে রয়েছে"
+                      )}
+                    </p>
+                  </div>
 
-          {activeTab === "medical-records" && <MedicalRecordsView t={t} />}
+                  {/* Stats Grid */}
+                  <DashboardStats t={t} />
 
-          {activeTab === "prescriptions" && <PrescriptionsView t={t} />}
+                  {/* Calendar and Reminders Grid */}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-2">
+                      <AppointmentCalendar t={t} />
+                    </div>
+                    <div>
+                      <HealthReminders t={t} />
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* Appointments Tab */}
+              {activeTab === "appointments" && (
+                <div className="space-y-6">
+                  <div>
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                      {t("Your Appointments", "আপনার অ্যাপয়েন্টমেন্টসমূহ")}
+                    </h1>
+                    <p className="text-gray-600">
+                      {t(
+                        "Manage and view all your dental appointments",
+                        "আপনার সকল দন্ত চিকিৎসা অ্যাপয়েন্টমেন্ট পরিচালনা করুন"
+                      )}
+                    </p>
+                  </div>
+                  {appointments.length > 0 ? (
+                    <EnhancedAppointmentsTable
+                      appointments={appointments}
+                      t={t}
+                    />
+                  ) : (
+                    <AppointmentsView
+                      t={t}
+                      onNavigate={onNavigate}
+                      appointments={appointments}
+                    />
+                  )}
+                </div>
+              )}
+
+              {/* Medical Records Tab */}
+              {activeTab === "medical-records" && (
+                <div>
+                  <div className="mb-6">
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                      {t("Medical Records", "মেডিকেল রেকর্ড")}
+                    </h1>
+                    <p className="text-gray-600">
+                      {t(
+                        "Access your complete dental history",
+                        "আপনার সম্পূর্ণ দাঁতের ইতিহাস অ্যাক্সেস করুন"
+                      )}
+                    </p>
+                  </div>
+                  <MedicalRecordsView t={t} />
+                </div>
+              )}
+
+              {/* Prescriptions Tab */}
+              {activeTab === "prescriptions" && (
+                <div>
+                  <div className="mb-6">
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                      {t("Prescriptions", "প্রেসক্রিপশন")}
+                    </h1>
+                    <p className="text-gray-600">
+                      {t(
+                        "View and manage your medications",
+                        "আপনার ওষুধ পরিচালনা করুন"
+                      )}
+                    </p>
+                  </div>
+                  <PrescriptionsView t={t} />
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
+        <QuickActionButton onClick={() => onNavigate("book-appointment")} />
+      </ToastProvider>
     );
   }
 
@@ -239,7 +352,7 @@ export function PatientPortalPage({
   return (
     <LoginSignupView
       t={t}
-      view={view}
+      view={view === "dashboard" ? "login" : view}
       setView={setView}
       onNavigate={onNavigate}
       loginData={loginData}

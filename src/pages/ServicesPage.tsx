@@ -15,15 +15,20 @@ import {
   List, // Using a list icon for "All Services"
 } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
-import { useAuth } from "../contexts/AuthContext";
 import servicesData from "../data/dummy-data.json";
+import { useAuth } from "../contexts/AuthContext";
+import { db, Service } from "../lib/database";
+import { useCallback } from "react";
 
 // ... (Service and ServicesPageProps interfaces remain the same)
 
 export function ServicesPage({ onNavigate }: ServicesPageProps) {
   const { t } = useLanguage();
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const [loading, setLoading] = useState(true);
+  const [services, setServices] = useState<Service[]>([]);
+  const [creatingService, setCreatingService] = useState(false);
+  const [newServiceTitle, setNewServiceTitle] = useState("");
   // --- CHANGE 1: Set initial category to "all" ---
   const [activeCategory, setActiveCategory] = useState("all");
 
@@ -65,10 +70,39 @@ export function ServicesPage({ onNavigate }: ServicesPageProps) {
   ];
 
   // --- CHANGE 3: Update filtering logic to handle the "all" case ---
+  useEffect(() => {
+    // load from db so admin updates are reflected
+    setServices(db.getAllServices());
+  }, []);
+
   const filteredServices =
     activeCategory === "all"
-      ? servicesData.services
-      : servicesData.services.filter((s) => s.category === activeCategory);
+      ? services
+      : services.filter((s) => s.category === activeCategory);
+
+  const handleCreateService = useCallback(() => {
+    if (!newServiceTitle.trim()) return;
+    const slug = newServiceTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    const service: Service = {
+      id: "svc-" + Date.now(),
+      title: newServiceTitle,
+      slug,
+      category: "general",
+      description: newServiceTitle,
+      short_description: newServiceTitle,
+      created_at: new Date().toISOString(),
+    } as Service;
+    db.createService(service);
+    setServices(db.getAllServices());
+    setNewServiceTitle("");
+    setCreatingService(false);
+  }, [newServiceTitle]);
+
+  const handleDeleteService = useCallback((id: string) => {
+    if (!confirm("Delete service?")) return;
+    db.deleteService(id);
+    setServices(db.getAllServices());
+  }, []);
 
   return (
     <div className="min-h-screen">
@@ -158,6 +192,14 @@ export function ServicesPage({ onNavigate }: ServicesPageProps) {
                     >
                       {t("Book Now", "বুক করুন")}
                     </button>
+                    {isAdmin() && (
+                      <button
+                        onClick={() => handleDeleteService(service.id)}
+                        className="ml-2 text-red-600 hover:text-red-900"
+                      >
+                        Delete
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -165,6 +207,38 @@ export function ServicesPage({ onNavigate }: ServicesPageProps) {
           </div>
         </div>
       </section>
+
+      {isAdmin() && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="bg-white p-4 rounded shadow">
+            <div className="flex items-center space-x-2 mb-3">
+              <h3 className="font-semibold">Admin: Manage Services</h3>
+              <button
+                onClick={() => setCreatingService((s) => !s)}
+                className="btn btn-sm"
+              >
+                {creatingService ? "Cancel" : "Create Service"}
+              </button>
+            </div>
+            {creatingService && (
+              <div className="flex gap-2">
+                <input
+                  value={newServiceTitle}
+                  onChange={(e) => setNewServiceTitle(e.target.value)}
+                  className="input"
+                  placeholder="Service title"
+                />
+                <button
+                  onClick={handleCreateService}
+                  className="btn btn-primary"
+                >
+                  Create
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* --- CTA SECTION --- */}
       <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">

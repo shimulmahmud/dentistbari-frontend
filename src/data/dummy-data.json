@@ -1,6 +1,15 @@
 {
   "users": [
     {
+      "id": "user-0",
+      "email": "admin@dentistbari.com",
+      "password": "admin123",
+      "fullName": "Site Admin",
+      "phone": "+880 1000-000000",
+      "role": "admin",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
       "id": "user-1",
       "email": "doctor@dentistbari.com",
       "password": "doctor123",

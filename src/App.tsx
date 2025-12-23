@@ -12,9 +12,10 @@ import { BookAppointmentPage } from "./pages/BookAppointmentPage";
 import { ContactPage } from "./pages/ContactPage";
 import { PatientPortalPage } from "./pages/PatientPortalPage";
 import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
+import AdminLayout from "./pages/Admin/AdminLayout";
 
 function AppContent() {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const [currentPage, setCurrentPage] = useState(
     user ? "patient-portal" : "home"
   );
@@ -64,6 +65,15 @@ function AppContent() {
     }
   }, [user, currentPage]);
 
+  useEffect(() => {
+    // protect admin route: redirect non-admins
+    if (currentRoute.page === "admin") {
+      if (!isAdmin || !isAdmin()) {
+        setCurrentPage(user ? "home" : "login");
+      }
+    }
+  }, [currentRoute.page, user, isAdmin]);
+
   const handleNavigate = (page: string) => {
     if (page.startsWith("/")) {
       // Handle direct path navigation
@@ -80,7 +90,9 @@ function AppContent() {
   };
 
   const shouldShowHeaderFooter =
-    currentPage !== "login" && !currentPage.startsWith("services/");
+    currentPage !== "login" &&
+    currentPage !== "patient-portal" &&
+    !currentPage.startsWith("services/");
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -115,6 +127,12 @@ function AppContent() {
         )}
         {currentRoute.page === "patient-portal" && (
           <PatientPortalPage onNavigate={handleNavigate} initialView="login" />
+        )}
+        {currentRoute.page === "admin" && (
+          <AdminLayout
+            currentSub={currentRoute.params[0]}
+            onNavigate={handleNavigate}
+          />
         )}
         {currentRoute.page === "forgot-password" && (
           <ForgotPasswordPage onNavigate={handleNavigate} />
