@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import { useLocation, useNavigate, Outlet, Navigate } from "react-router-dom";
+import { useLocation, useNavigate, Outlet } from "react-router-dom";
 import {
   FiMenu,
   FiHome,
@@ -12,9 +12,7 @@ import {
   FiUser,
   FiMessageSquare,
   FiPieChart,
-  FiChevronDown,
   FiX,
-  FiLogOut,
 } from "react-icons/fi";
 
 // Define types for menu items
@@ -24,41 +22,6 @@ interface MenuItem {
   icon: React.ReactNode;
   exact?: boolean;
 }
-
-// Menu items
-const menuItems: MenuItem[] = [
-  {
-    name: "Dashboard",
-    path: "/admin",
-    icon: <FiHome className="w-5 h-5" />,
-    exact: true,
-  },
-  {
-    name: "Users",
-    path: "/admin/users",
-    icon: <FiUsers className="w-5 h-5" />,
-  },
-  {
-    name: "Appointments",
-    path: "/admin/appointments",
-    icon: <FiCalendar className="w-5 h-5" />,
-  },
-  {
-    name: "Services",
-    path: "/admin/services",
-    icon: <FiPieChart className="w-5 h-5" />,
-  },
-  {
-    name: "Messages",
-    path: "/admin/messages",
-    icon: <FiMessageSquare className="w-5 h-5" />,
-  },
-  {
-    name: "Settings",
-    path: "/admin/settings",
-    icon: <FiSettings className="w-5 h-5" />,
-  },
-];
 
 // Sidebar item component
 const SidebarItem = ({
@@ -115,6 +78,41 @@ const NotificationBell = ({ count = 0 }: { count?: number }) => (
   </button>
 );
 
+// Menu items
+const menuItems: MenuItem[] = [
+  {
+    name: "Dashboard",
+    path: "/admin",
+    icon: <FiHome className="w-5 h-5" />,
+    exact: true,
+  },
+  {
+    name: "Users",
+    path: "/admin/users",
+    icon: <FiUsers className="w-5 h-5" />,
+  },
+  {
+    name: "Appointments",
+    path: "/admin/appointments",
+    icon: <FiCalendar className="w-5 h-5" />,
+  },
+  {
+    name: "Services",
+    path: "/admin/services",
+    icon: <FiPieChart className="w-5 h-5" />,
+  },
+  {
+    name: "Messages",
+    path: "/admin/messages",
+    icon: <FiMessageSquare className="w-5 h-5" />,
+  },
+  {
+    name: "Settings",
+    path: "/admin/settings",
+    icon: <FiSettings className="w-5 h-5" />,
+  },
+];
+
 // Main AdminLayout component
 const AdminLayout = () => {
   const { user, logout } = useAuth();
@@ -125,25 +123,7 @@ const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
-  const [notifications] = useState([
-    {
-      id: 1,
-      text: "New appointment request from John Doe",
-      time: "5 minutes ago",
-      read: false,
-    },
-    {
-      id: 2,
-      text: "Your report is ready to download",
-      time: "1 hour ago",
-      read: true,
-    },
-  ]);
-
-  // Check if user is authenticated
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
+  const [notifications] = useState(3); // Mock notifications count
 
   // Toggle sidebar
   const toggleSidebar = () => {
@@ -175,21 +155,6 @@ const AdminLayout = () => {
     }
   };
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (!target.closest(".user-menu")) {
-        setUserDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const unreadNotifications = notifications.filter((n) => !n.read).length;
-
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Mobile sidebar */}
@@ -205,7 +170,7 @@ const AdminLayout = () => {
                 onClick={toggleSidebar}
                 className="flex items-center justify-center w-12 h-12 rounded-full focus:outline-none focus:bg-gray-600"
               >
-                <FiMenu className="w-6 h-6 text-white" />
+                <FiX className="w-6 h-6 text-white" />
               </button>
             </div>
             <div className="flex items-center flex-shrink-0 px-4">
@@ -280,80 +245,8 @@ const AdminLayout = () => {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            {/* Notifications */}
+            <NotificationBell count={notifications} />
             <div className="relative">
-              <button
-                className="p-2 text-gray-500 rounded-full hover:bg-gray-100"
-                onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-              >
-                <div className="relative">
-                  <FiBell className="w-5 h-5" />
-                  {unreadNotifications > 0 && (
-                    <span className="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 text-xs font-medium text-white bg-red-500 rounded-full">
-                      {unreadNotifications}
-                    </span>
-                  )}
-                </div>
-              </button>
-
-              {/* Notifications dropdown */}
-              {userDropdownOpen && (
-                <div className="absolute right-0 w-80 mt-2 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50">
-                  <div className="p-2 border-b border-gray-200">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium text-gray-900">
-                        Notifications
-                      </p>
-                      <button
-                        onClick={() => {
-                          // Mark all notifications as read logic would go here
-                          console.log("Mark all as read clicked");
-                        }}
-                        className="text-xs text-indigo-600 hover:text-indigo-800"
-                      >
-                        Mark all as read
-                      </button>
-                    </div>
-                  </div>
-                  <div className="py-1">
-                    {notifications.map((notification) => (
-                      <div
-                        key={notification.id}
-                        className={`px-4 py-3 hover:bg-gray-50 ${
-                          !notification.read ? "bg-indigo-50" : ""
-                        }`}
-                      >
-                        <p className="text-sm text-gray-900">
-                          {notification.text}
-                        </p>
-                        <p className="mt-1 text-xs text-gray-500">
-                          {notification.time}
-                        </p>
-                      </div>
-                    ))}
-                    {notifications.length === 0 && (
-                      <p className="px-4 py-3 text-sm text-gray-500">
-                        No new notifications
-                      </p>
-                    )}
-                  </div>
-                  <div className="p-2 text-center border-t border-gray-200">
-                    <button
-                      onClick={() => {
-                        // View all notifications logic would go here
-                        console.log("View all notifications clicked");
-                      }}
-                      className="text-sm font-medium text-indigo-600 hover:text-indigo-800"
-                    >
-                      View all notifications
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* User dropdown */}
-            <div className="relative user-menu">
               <button
                 onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                 className="flex items-center max-w-xs text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -368,7 +261,7 @@ const AdminLayout = () => {
                 )}
               </button>
               {userDropdownOpen && (
-                <div className="absolute right-0 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                <div className="absolute right-0 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div className="px-4 py-2">
                     <p className="text-sm text-gray-700">
                       {user?.email || "user@example.com"}
@@ -379,7 +272,6 @@ const AdminLayout = () => {
                     onClick={handleLogout}
                     className="flex items-center w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100"
                   >
-                    <FiLogOut className="w-4 h-4 mr-2" />
                     Sign out
                   </button>
                 </div>
